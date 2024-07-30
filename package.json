@@ -2,10 +2,11 @@
   "name": "clean-node-api",
   "version": "1.0.0",
   "description": "",
+  "author": "Annibal Silva",
   "main": "index.js",
   "scripts": {
-    "test": "jest --watchAll",
-    "test:staged": "jest --passWithNoTests"
+    "test": "jest --watchAll --silent --colors --noStackTrace",
+    "test:staged": "jest --passWithNoTests --findRelatedTests --silent --noStackTrace"
   },
   "standard": {
     "env": ["jest"]
@@ -14,7 +15,6 @@
     "type": "git",
     "url": "git+https://github.com/CodeAnnibal/clean-node-api.git"
   },
-  "author": "",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/CodeAnnibal/clean-node-api/issues"
