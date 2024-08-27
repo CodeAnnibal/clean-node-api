@@ -213,6 +213,27 @@ describe('Auth UseCase', () => {
     expect(updateAccessTokenRepositorySpy.accessToken).toBe(tokenGeneratorSpy.accessToken)
   })
 
+  test('Should throw if no updateAccessTokenRepository is provided', async () => {
+    const sut = new AuthUseCase({
+      loadUserByEmailRepository: makeLoadUserByEmailRepository(),
+      encrypter: makeEncrypter(),
+      tokenGenerator: makeTokenGenerator()
+    })
+    const promise = sut.auth('any_email@mail.com', 'any_password')
+    expect(promise).rejects.toThrow(new MissingParamError('loadUserByEmailRepository'))
+  })
+
+  test('Should throw if an invalid updateAccessTokenRepository is provided', async () => {
+    const sut = new AuthUseCase({
+      loadUserByEmailRepository: makeLoadUserByEmailRepository(),
+      encrypter: makeEncrypter(),
+      tokenGenerator: makeTokenGenerator(),
+      updateAccessTokenRepository: {}
+    })
+    const promise = sut.auth('any_email@mail.com', 'any_password')
+    expect(promise).rejects.toThrow(new MissingParamError('loadUserByEmailRepository'))
+  })
+
   test('Should throw if any dependency throws', async () => {
     const loadUserByEmailRepository = makeLoadUserByEmailRepository()
     const encrypter = makeEncrypter()
