@@ -77,8 +77,14 @@ describe('Auth UseCase', () => {
     expect(loadUserByEmailRepositorySpy.email).toBe('any_email@mail.com')
   })
 
+  test('Should throw if no dependency is provided', async () => {
+    const sut = new AuthUseCase()
+    const promise = sut.auth('any_email@mail.com', 'any_password')
+    expect(promise).rejects.toThrow(new MissingParamError('loadUserByEmailRepository'))
+  })
+
   test('Should throw if no LoadUserByEmailRepository is provided', async () => {
-    const sut = new AuthUseCase({})
+    const sut = new AuthUseCase({ loadUserByEmailRepository: null })
     const promise = sut.auth('any_email@mail.com', 'any_password')
     expect(promise).rejects.toThrow(new MissingParamError('loadUserByEmailRepository'))
   })
@@ -87,6 +93,44 @@ describe('Auth UseCase', () => {
     const sut = new AuthUseCase({ loadUserByEmailRepository: {} })
     const promise = sut.auth('any_email@mail.com', 'any_password')
     expect(promise).rejects.toThrow(new InvalidParamError('loadUserByEmailRepository'))
+  })
+
+  test('Should throw if no encrypter is provided', async () => {
+    const sut = new AuthUseCase({
+      loadUserByEmailRepository: makeLoadUserByEmailRepository(),
+      encrypter: null
+    })
+    const promise = sut.auth('any_email@mail.com', 'any_password')
+    expect(promise).rejects.toThrow(new MissingParamError('loadUserByEmailRepository'))
+  })
+
+  test('Should throw if no valid encrypter is provided', async () => {
+    const sut = new AuthUseCase({
+      loadUserByEmailRepository: makeLoadUserByEmailRepository(),
+      encrypter: {}
+    })
+    const promise = sut.auth('any_email@mail.com', 'any_password')
+    expect(promise).rejects.toThrow(new MissingParamError('loadUserByEmailRepository'))
+  })
+
+  test('Should throw if no tokenGeneretor is provided', async () => {
+    const sut = new AuthUseCase({
+      loadUserByEmailRepository: makeLoadUserByEmailRepository(),
+      encrypter: makeEncrypter(),
+      tokenGenerator: null
+    })
+    const promise = sut.auth('any_email@mail.com', 'any_password')
+    expect(promise).rejects.toThrow(new MissingParamError('loadUserByEmailRepository'))
+  })
+
+  test('Should throw if no valid tokenGeneretor is provided', async () => {
+    const sut = new AuthUseCase({
+      loadUserByEmailRepository: makeLoadUserByEmailRepository(),
+      encrypter: makeEncrypter(),
+      tokenGenerator: {}
+    })
+    const promise = sut.auth('any_email@mail.com', 'any_password')
+    expect(promise).rejects.toThrow(new MissingParamError('loadUserByEmailRepository'))
   })
 
   test('Should return null if an invalid email is provided', async () => {
