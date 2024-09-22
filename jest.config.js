@@ -12,7 +12,12 @@ const config = {
   // The test environment that will be used for testing
   testEnvironment: 'node',
 
-  collectCoverageFrom: ['**/src/**/*.js']
+  collectCoverageFrom: ['**/src/**/*.js'],
+
+  // Config mongodb em memória
+  preset: '@shelf/jest-mongodb',
+
+  watchPathIgnorePatterns: ['globalConfig']
 
 }
 
