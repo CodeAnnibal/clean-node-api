@@ -12,11 +12,15 @@ module.exports = {
   },
 
   async disconnect () {
-    this.client.close()
+    await this.client.close()
+    this.client = null
+    this.db = null
   },
 
   async getDb () {
-    // await this.connect(this.uri, this.dbName)
+    if (!this.db) {
+      await this.connect(this.uri, this.dbName)
+    }
     return this.db
   }
 }
